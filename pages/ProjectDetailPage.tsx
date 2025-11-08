@@ -11,10 +11,10 @@ import ErrorDisplay from '../components/ErrorDisplay';
 const HeroMedia: React.FC<{ media: Project['heroMedia'] }> = ({ media }) => {
   switch (media.type) {
     case 'image':
-      return <img src={media.src} alt="Project hero" className="w-full h-auto object-cover" />;
+      return <img src={media.src} alt="Project hero" className="w-full h-auto object-cover" loading="lazy" />;
     case 'video':
       return (
-        <video src={media.src} className="w-full h-auto" autoPlay loop muted playsInline />
+        <video src={media.src} className="w-full h-auto" autoPlay loop muted playsInline preload="metadata" />
       );
     case 'youtube':
       return (
@@ -25,6 +25,7 @@ const HeroMedia: React.FC<{ media: Project['heroMedia'] }> = ({ media }) => {
             allow="autoplay; encrypted-media"
             allowFullScreen
             className="w-full h-full"
+            loading="lazy"
           ></iframe>
         </div>
       );
@@ -102,7 +103,7 @@ const ProjectDetailPage: React.FC = () => {
                         <h3 className="text-xl font-bold uppercase tracking-wider mb-4">Gallery</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {project.gallery.map((imgSrc, index) => (
-                                <img key={index} src={imgSrc} alt={`Gallery image ${index + 1}`} className="w-full h-auto object-cover" />
+                                <img key={index} src={imgSrc} alt={`Gallery image ${index + 1}`} className="w-full h-auto object-cover" loading="lazy" />
                             ))}
                         </div>
                     </div>

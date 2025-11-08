@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 // Fix: Add Variants to framer-motion import
 import { motion, Variants } from 'framer-motion';
 import AnimatedPage from '../components/AnimatedPage';
 import ArrowIcon from '../components/icons/ArrowIcon';
+import { useContent } from '../hooks/useContent';
+import { usePreloader } from '../hooks/usePreloader';
+import { Project } from '../types';
 
 const title = "VIKAS";
 const titleContainerVariants = {
@@ -29,6 +32,29 @@ const letterVariants: Variants = {
 };
 
 const HomePage: React.FC = () => {
+  const { content } = useContent();
+
+  // Extract all media URLs to be preloaded for the portfolio page
+  const portfolioMediaUrls = useMemo(() => {
+    if (!content?.projects) return [];
+
+    const urls = new Set<string>();
+
+    content.projects.forEach((project: Project) => {
+      if (project.thumbnail) urls.add(project.thumbnail);
+      if (project.thumbnailVideo) urls.add(project.thumbnailVideo);
+      if (project.heroMedia?.src) urls.add(project.heroMedia.src);
+      if (project.gallery) {
+        project.gallery.forEach(url => urls.add(url));
+      }
+    });
+
+    return Array.from(urls);
+  }, [content]);
+
+  // Start preloading the assets for a smoother portfolio experience
+  usePreloader(portfolioMediaUrls);
+  
   return (
     <AnimatedPage type="fade">
       <div className="relative h-screen w-full flex items-center justify-center overflow-hidden">

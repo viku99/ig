@@ -51,6 +51,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
           className="absolute inset-0 w-full h-full object-cover"
           animate={{ scale: isHovered ? 1.05 : 1 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
+          loading="lazy"
         />
 
         {/* Hover Video */}

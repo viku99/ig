@@ -78,7 +78,7 @@ const AboutPage: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.4 }}
           >
-            <img src={about.imageUrl} alt="Vikas" className="object-cover w-full" />
+            <img src={about.imageUrl} alt="Vikas" className="object-cover w-full" loading="lazy" />
           </motion.div>
         </div>
 
