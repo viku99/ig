@@ -58,13 +58,10 @@ const HomePage: React.FC = () => {
   return (
     <AnimatedPage type="fade">
       <div className="relative h-screen w-full flex items-center justify-center overflow-hidden">
-        <video
+        <img
+          src="https://images.pexels.com/photos/355887/pexels-photo-355887.jpeg?auto=compress&cs=tinysrgb&w=1280&h=720&dpr=2"
+          alt="Abstract background with glowing light trails"
           className="absolute top-1/2 left-1/2 w-full h-full object-cover -translate-x-1/2 -translate-y-1/2"
-          src="https://assets.mixkit.co/videos/preview/mixkit-flying-through-a-universe-of-particles-39755-large.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
         />
         <div className="absolute inset-0 bg-black/70"></div>
 
