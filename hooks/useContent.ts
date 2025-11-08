@@ -17,8 +17,9 @@ export function useContent(): UseContentResult {
     setLoading(true);
     setError(null);
     try {
-      // Using an absolute path to fetch from the public root
-      const response = await fetch('/content.json');
+      // Fix: Changed path from absolute '/content.json' to relative './content.json'
+      // to ensure the file is found correctly in all environments.
+      const response = await fetch('./content.json');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
