@@ -34,7 +34,7 @@ const HomePage: React.FC = () => {
       <div className="relative h-screen w-full flex items-center justify-center overflow-hidden">
         <video
           className="absolute top-1/2 left-1/2 w-full h-full object-cover -translate-x-1/2 -translate-y-1/2"
-          src="https://videos.pexels.com/video-files/857251/857251-hd_1920_1080_25fps.mp4"
+          src="https://assets.mixkit.co/videos/preview/mixkit-flying-through-a-universe-of-particles-39755-large.mp4"
           autoPlay
           loop
           muted

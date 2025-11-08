@@ -17,6 +17,17 @@ const containerVariants = {
   },
 };
 
+const NoResults: React.FC = () => (
+    <motion.div
+      className="text-center col-span-full py-24"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <h2 className="text-2xl font-bold">No Projects Found</h2>
+      <p className="text-neutral-400 mt-2">Try adjusting your search or filter criteria.</p>
+    </motion.div>
+  );
+
 const PortfolioPage: React.FC = () => {
   const { content, loading, error, refetch } = useContent();
   const [searchTerm, setSearchTerm] = useState('');
@@ -46,12 +57,12 @@ const PortfolioPage: React.FC = () => {
     );
   }
 
-  if (error) {
+  if (error || !content) {
     return (
       <AnimatedPage type="cinematic">
         <ErrorDisplay
           title="Failed to Load Portfolio"
-          message={error.message}
+          message={error?.message || "Content could not be found."}
           onRetry={refetch}
         />
       </AnimatedPage>
@@ -64,6 +75,14 @@ const PortfolioPage: React.FC = () => {
         <motion.div initial={{opacity: 0, y:20}} animate={{opacity: 1, y: 0}} transition={{delay: 0.2}}>
           <h1 className="text-7xl md:text-9xl font-black uppercase tracking-tighter mb-4">Work</h1>
           <p className="text-neutral-300 max-w-3xl text-lg leading-relaxed">A curated selection of projects demonstrating a blend of artistic vision and technical skill in motion design, VFX, and visual storytelling.</p>
+          <motion.p
+            className="text-neutral-500 text-sm mt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            Last Updated: {content.lastUpdated}
+        </motion.p>
         </motion.div>
 
         <motion.div className="my-12 flex flex-col md:flex-row gap-6 items-center" initial={{opacity: 0, y:20}} animate={{opacity: 1, y: 0}} transition={{delay: 0.4}}>
@@ -91,20 +110,24 @@ const PortfolioPage: React.FC = () => {
            </div>
         </motion.div>
         
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {filteredProjects.map((project, index) => (
-            <ProjectCard 
-              key={project.id} 
-              project={project}
-              className={index % 7 === 0 || index % 7 === 6 ? 'lg:col-span-2' : ''}
-            />
-          ))}
-        </motion.div>
+        {filteredProjects.length > 0 ? (
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 gap-8"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {filteredProjects.map((project, index) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                className={index === 0 ? 'md:col-span-2 aspect-video' : 'aspect-square'}
+              />
+            ))}
+          </motion.div>
+        ) : (
+          <NoResults />
+        )}
       </>
     </AnimatedPage>
   );

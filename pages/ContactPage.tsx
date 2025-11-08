@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AnimatedPage from '../components/AnimatedPage';
 import CopyIcon from '../components/icons/CopyIcon';
@@ -10,8 +10,11 @@ import InstagramIcon from '../components/icons/InstagramIcon';
 import LinkedInIcon from '../components/icons/LinkedInIcon';
 import MailIcon from '../components/icons/MailIcon';
 import WhatsAppIcon from '../components/icons/WhatsAppIcon';
+import { useContent } from '../hooks/useContent';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const ContactPage: React.FC = () => {
+  const { content, loading } = useContent();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -21,15 +24,15 @@ const ContactPage: React.FC = () => {
   
   const [copied, setCopied] = useState(false);
   
-  const socialLinks = [
+   const socialLinks = useMemo(() => [
     { name: 'LinkedIn', icon: <LinkedInIcon className="w-6 h-6" />, href: "https://www.linkedin.com/in/vikasbala19" },
     { name: 'Behance', icon: <BehanceIcon className="w-6 h-6" />, href: "https://www.behance.net/vikasbala" },
     { name: 'Github', icon: <GithubIcon className="w-6 h-6" />, href: "https://github.com/viku99" },
-    { name: 'Instagram', icon: <InstagramIcon className="w-6 h-6" />, href: "https://www.instagram.com/zorox.x_" },
+    { name: "Instagram", icon: <InstagramIcon className="w-6 h-6" />, href: "https://www.instagram.com/zorox.x_" },
     { name: 'WhatsApp', icon: <WhatsAppIcon className="w-6 h-6" />, href: "https://wa.me/919043529067" },
     { name: 'Discord', icon: <DiscordIcon className="w-6 h-6" />, href: "https://discord.com/users/zororobinxo" },
     { name: 'Email', icon: <MailIcon className="w-6 h-6" />, href: "mailto:vikasbg.png@gmail.com" },
-  ];
+  ], []);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -146,6 +149,16 @@ const ContactPage: React.FC = () => {
       </motion.p>
     </motion.div>
   );
+
+  if (loading) {
+      return (
+          <AnimatedPage type="fade">
+              <div className="min-h-[60vh] flex items-center justify-center">
+                  <LoadingSpinner/>
+              </div>
+          </AnimatedPage>
+      )
+  }
 
   return (
     <AnimatedPage type="fade">
