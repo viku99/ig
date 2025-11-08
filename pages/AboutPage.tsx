@@ -3,6 +3,7 @@ import { motion, Variants } from 'framer-motion';
 import AnimatedPage from '../components/AnimatedPage';
 import { useContent } from '../hooks/useContent';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorDisplay from '../components/ErrorDisplay';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -24,7 +25,7 @@ const itemVariants: Variants = {
 };
 
 const AboutPage: React.FC = () => {
-  const { content, loading, error } = useContent();
+  const { content, loading, error, refetch } = useContent();
 
   if (loading) {
     return (
@@ -39,12 +40,11 @@ const AboutPage: React.FC = () => {
   if (error || !content) {
     return (
       <AnimatedPage type="fade">
-        <div className="min-h-screen flex items-center justify-center text-center px-4">
-            <div>
-                <h1 className="text-2xl font-bold text-red-500">Failed to Load Page Content</h1>
-                <p className="text-neutral-400 mt-2">{error?.message || "Content could not be found."}</p>
-            </div>
-        </div>
+        <ErrorDisplay
+          title="Failed to Load Page Content"
+          message={error?.message || "Content could not be found."}
+          onRetry={refetch}
+        />
       </AnimatedPage>
     );
   }

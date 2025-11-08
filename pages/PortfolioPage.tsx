@@ -5,6 +5,7 @@ import AnimatedPage from '../components/AnimatedPage';
 import ProjectCard from '../components/ProjectCard';
 import { useContent } from '../hooks/useContent';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorDisplay from '../components/ErrorDisplay';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -17,7 +18,7 @@ const containerVariants = {
 };
 
 const PortfolioPage: React.FC = () => {
-  const { content, loading, error } = useContent();
+  const { content, loading, error, refetch } = useContent();
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
 
@@ -48,12 +49,11 @@ const PortfolioPage: React.FC = () => {
   if (error) {
     return (
       <AnimatedPage type="cinematic">
-        <div className="min-h-screen flex items-center justify-center text-center px-4">
-            <div>
-                <h1 className="text-2xl font-bold text-red-500">Failed to Load Portfolio</h1>
-                <p className="text-neutral-400 mt-2">{error.message}</p>
-            </div>
-        </div>
+        <ErrorDisplay
+          title="Failed to Load Portfolio"
+          message={error.message}
+          onRetry={refetch}
+        />
       </AnimatedPage>
     );
   }

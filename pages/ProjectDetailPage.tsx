@@ -6,6 +6,7 @@ import AnimatedPage from '../components/AnimatedPage';
 import ArrowIcon from '../components/icons/ArrowIcon';
 import { useContent } from '../hooks/useContent';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorDisplay from '../components/ErrorDisplay';
 
 const HeroMedia: React.FC<{ media: Project['heroMedia'] }> = ({ media }) => {
   switch (media.type) {
@@ -35,7 +36,7 @@ const HeroMedia: React.FC<{ media: Project['heroMedia'] }> = ({ media }) => {
 
 const ProjectDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { content, loading, error } = useContent();
+  const { content, loading, error, refetch } = useContent();
 
   if (loading) {
     return (
@@ -50,15 +51,11 @@ const ProjectDetailPage: React.FC = () => {
   if (error) {
      return (
       <AnimatedPage type="cinematic">
-        <div className="min-h-screen flex items-center justify-center text-center px-4">
-            <div>
-                <h1 className="text-2xl font-bold text-red-500">Failed to Load Project</h1>
-                <p className="text-neutral-400 mt-2">{error.message}</p>
-                 <Link to="/portfolio" className="mt-4 inline-block text-white hover:underline">
-                    Back to Portfolio
-                </Link>
-            </div>
-        </div>
+        <ErrorDisplay
+          title="Failed to Load Project"
+          message={error.message}
+          onRetry={refetch}
+        />
       </AnimatedPage>
     );
   }
@@ -68,7 +65,7 @@ const ProjectDetailPage: React.FC = () => {
   if (!project) {
     return (
       <AnimatedPage type="cinematic">
-        <div className="min-h-screen flex items-center justify-center text-center px-4 py-24 md:pl-32 md:pr-8">
+        <div className="flex flex-col items-center justify-center text-center px-4 py-24 md:py-32">
           <div>
             <h1 className="text-4xl font-bold">Project Not Found</h1>
             <Link to="/portfolio" className="mt-4 inline-block text-white hover:underline">

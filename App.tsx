@@ -9,6 +9,7 @@ import PortfolioPage from './pages/PortfolioPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
+import ScrollToTop from './components/ScrollToTop';
 
 // A wrapper to apply the standard page layout to interior pages
 const LayoutWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -29,6 +30,7 @@ const Main: React.FC = () => {
   return (
     <div className="bg-brand-dark text-neutral-300">
       <Header />
+      <ScrollToTop />
       <main className="w-full">
         <AnimatePresence mode="wait" initial={false}>
           <Routes location={location} key={location.pathname}>
