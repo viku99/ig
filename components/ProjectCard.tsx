@@ -21,6 +21,9 @@ const itemVariants = {
   },
 };
 
+// A high-quality, smooth ease-out curve for all hover animations.
+const smoothEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
   const [isHovered, setIsHovered] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -28,8 +31,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
   useEffect(() => {
     if (isHovered && videoRef.current) {
       videoRef.current.play().catch(error => {
-        // Autoplay was prevented.
-        console.error("Video play failed:", error);
+        // This specific error "AbortError" is expected when a user quickly hovers
+        // on and off a video, interrupting the play promise. We can safely ignore it.
+        if (error.name !== 'AbortError') {
+            console.error("Video play failed:", error);
+        }
       });
     } else if (videoRef.current) {
       videoRef.current.pause();
@@ -39,39 +45,47 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
   return (
     <motion.div 
         variants={itemVariants} 
-        className={`relative block overflow-hidden group ${className}`}
+        className={`relative block overflow-hidden ${className}`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
     >
       <Link to={`/project/${project.id}`} className="block w-full h-full">
-        {/* Static Thumbnail Image */}
+        {/* Smoother, more subtle image scale animation */}
         <motion.img
           src={project.thumbnail}
           alt={`${project.title} thumbnail`}
           className="absolute inset-0 w-full h-full object-cover"
-          animate={{ scale: isHovered ? 1.05 : 1 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
+          animate={{ scale: isHovered ? 1.03 : 1 }}
+          transition={{ duration: 0.6, ease: smoothEase }}
           loading="lazy"
         />
 
-        {/* Hover Video */}
+        {/* Video fades in with the same smooth curve */}
         {project.thumbnailVideo && (
           <motion.video
             ref={videoRef}
-            src={project.thumbnailVideo}
             className="absolute inset-0 w-full h-full object-cover"
             loop
             muted
             playsInline
+            preload="metadata"
             initial={{ opacity: 0 }}
             animate={{ opacity: isHovered ? 1 : 0 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-          />
+            transition={{ duration: 0.6, ease: smoothEase }}
+          >
+            <source src={project.thumbnailVideo} type="video/mp4" />
+          </motion.video>
         )}
         
-        {/* Overlay and Content */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-500 ease-in-out" />
+        {/* Enhanced gradient overlay ensures text is always readable */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+        {/* Overlay darkens smoothly on hover */}
+        <motion.div 
+          className="absolute inset-0 bg-black"
+          initial={{ opacity: 0.2 }}
+          animate={{ opacity: isHovered ? 0.4 : 0.2 }}
+          transition={{ duration: 0.5, ease: smoothEase }}
+        />
         
         {/* Centered Play Icon on Hover */}
         <AnimatePresence>
@@ -97,10 +111,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
           <h3 className="text-2xl lg:text-3xl font-bold uppercase tracking-tight mt-1">{project.title}</h3>
         </div>
       </Link>
-       {/* Hover Glow Effect */}
+       {/* Refined Glow Effect controlled entirely by Framer Motion */}
       <motion.div
-        className="absolute inset-0 pointer-events-none ring-4 ring-brand-accent/0 group-hover:ring-brand-accent/50 ring-offset-4 ring-offset-brand-dark transition-all duration-300"
-        animate={{ opacity: isHovered ? 1 : 0 }}
+        className="absolute inset-0 pointer-events-none ring-2 ring-brand-accent"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isHovered ? 0.6 : 0 }}
+        transition={{ duration: 0.4, ease: smoothEase }}
       />
     </motion.div>
   );

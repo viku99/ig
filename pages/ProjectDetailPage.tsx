@@ -14,7 +14,9 @@ const HeroMedia: React.FC<{ media: Project['heroMedia'] }> = ({ media }) => {
       return <img src={media.src} alt="Project hero" className="w-full h-auto object-cover" loading="lazy" />;
     case 'video':
       return (
-        <video src={media.src} className="w-full h-auto" autoPlay loop muted playsInline preload="metadata" />
+        <video className="w-full h-auto" autoPlay loop muted playsInline preload="metadata">
+          <source src={media.src} type="video/mp4" />
+        </video>
       );
     case 'youtube':
       return (
