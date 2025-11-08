@@ -59,11 +59,11 @@ const HomePage: React.FC = () => {
     <AnimatedPage type="fade">
       <div className="relative h-screen w-full flex items-center justify-center overflow-hidden">
         <img
-          src="https://images.pexels.com/photos/355887/pexels-photo-355887.jpeg?auto=compress&cs=tinysrgb&w=1280&h=720&dpr=2"
-          alt="Abstract background with glowing light trails"
+          src="https://images.pexels.com/photos/57690/pexels-photo-57690.jpeg?auto=compress&cs=tinysrgb&w=1920"
+          alt="Designer's desk with a laptop, notebook, and camera"
           className="absolute top-1/2 left-1/2 w-full h-full object-cover -translate-x-1/2 -translate-y-1/2"
         />
-        <div className="absolute inset-0 bg-black/70"></div>
+        <div className="absolute inset-0 bg-black/50"></div>
 
         <div className="relative z-10 text-center text-white p-4">
           <motion.h1
